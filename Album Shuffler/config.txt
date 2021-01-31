@@ -1,0 +1,2 @@
+# Define the path where your music is stored on your Pi MusicBox
+music_path=/music/USB/Music/Music/
