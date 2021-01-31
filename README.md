@@ -47,9 +47,9 @@ This will start playing music until the script is terminated (with Control + C) 
 You can also add the script to rc.local to have the randomiser scripts run on system boot. Add one of the lines to `/etc/rc.local/` to enable this.
 
 The scripts will terminate if you run exit your SSH session. In order to run them whilst logging out of your SSH session, use `screen`;
-    - Type `screen` then enter
-    - Run one of the scripts.
-    - Hit Control + A
-    - Hit Control + D
+ - Type `screen` then enter
+ - Run one of the scripts.
+ - Hit Control + A
+ - Hit Control + D
 
 This will run the script inside a screen and allow you to exit your SSH session but still keep your scripts running.
