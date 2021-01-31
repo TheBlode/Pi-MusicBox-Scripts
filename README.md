@@ -23,3 +23,18 @@ If you like shuffling through songs, then you can use this script.  Simply copy 
 31-01-2021_11_37-57: /music/USB/Music/Music/Faith No More/The Real Thing/03 - Falling To Pieces_1.mp3
 31-01-2021_11_38-01: /music/USB/Music/Music/Linkin Park feat. Pusha T & Stormzy/One More Light/02 - Good Goodbye.mp3
 ```
+
+## How to run the scripts
+Once you have transferred the scripts to your Pi MusicBox, you have to SSH into the box and run;
+
+```
+perl random_song_player.pl
+
+or
+
+perl random_music_player.pl
+```
+
+This will start playing music until the script is terminated (with Control + C) or if the box is rebooted.
+
+You can also add the script to rc.local to have the randomiser scripts run on system boot. Add one of the lines to `/etc/rc.local/` to enable this.
