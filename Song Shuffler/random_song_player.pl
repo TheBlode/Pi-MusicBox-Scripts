@@ -192,7 +192,7 @@ while (1 eq 1) {
         }
 
         # Sleep
-        sleep(60);
+        sleep(10);
     }
 }
 
