@@ -1,2 +1,23 @@
 # Define the path where your music is stored on your Pi MusicBox
 music_path=/music/USB/Music/Music/
+
+# Enable break time message?
+break_time_message=1
+
+# Define break interval (in minutes)
+break_time_interval=30
+
+# Define break music path
+break_message_path=/music/USB/break.mp3
+
+# Set alarm mode flag
+alarm_mode=1
+
+# Set alarm time
+alarm_time=600
+
+# Set beginning of alarm time
+alarm_begin_time=2000
+
+# Set this flag to play music or not (useful for just playing break messages only)
+play_music=0
