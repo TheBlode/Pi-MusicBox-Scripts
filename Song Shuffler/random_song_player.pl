@@ -14,114 +14,116 @@ my $debug = 0;
 my $path = "";
 my $breaks = "";
 my $break_message = "";
-my $break_interval = 0;
+my $break_interval = 1;
 my $alarm_active = 0;
 my $play_music = 1;
-
-# Define working directory
-my $working_directory = getcwd();
-
-# Load config
-my $file = "$working_directory/config.txt";
-                
-# Open file handle
-open my $info, $file or die "Could not open $file: $!";
-
-while(my $line = <$info>) {
-    # Fetch music path address
-    if ($line =~ m/music_path=/) {
-        # Store music path address
-        $path = $line;
-
-        # Format result
-        $path =~ s/music_path=//gi;
-        chomp($path);
-    }
-
-    # Fetch break message path
-    if ($line =~ m/break_time_message=/) {
-        # Store break flag
-        $breaks = $line;
-
-        # Format result
-        $breaks =~ s/break_time_message=//gi;
-        chomp($breaks);
-    }
-
-    # If breaks are enabled, load break message path
-    if ($breaks == "1") {
-        # Fetch break message path
-        if ($line =~ m/break_message_path=/) {
-            # Store break path address
-            $break_message = $line;
-
-            # Format result
-            $break_message =~ s/break_message_path=//gi;
-            chomp($break_message);
-        }
-
-        # Fetch break interval
-        if ($line =~ m/break_time_interval=/) {
-            # Store break time interval
-            $break_interval = $line;
-
-            # Format result
-            $break_interval =~ s/break_time_interval=//gi;
-            chomp($break_interval);
-        }
-    }
-
-    # If alarms is enabled, load break variable into program
-    if ($line =~ m/alarm_mode=/) {
-        # Store alarm flag
-        $alarm_mode = $line;
-
-        # Format result
-        $alarm_mode =~ s/alarm_mode=//gi;
-        chomp($alarm_mode);
-    }
-
-    # If alarms is enabled, load break variable into program
-    if ($alarm_mode == "1") {
-        # Fetch alarm time
-        if ($line =~ m/alarm_time=/) {
-            # Store break path address
-            $alarm_time = $line;
-
-            # Format result
-            $alarm_time =~ s/alarm_time=//gi;
-            chomp($alarm_time);
-        }
-
-        # Fetch alarm begin time
-        if ($line =~ m/alarm_begin_time=/) {
-            # Store break path address
-            $alarm_begin_time = $line;
-
-            # Format result
-            $alarm_begin_time =~ s/alarm_begin_time=//gi;
-            chomp($alarm_begin_time);
-        }
-    }
-
-    # Fetch play music flag
-    if ($line =~ m/play_music=/) {
-        # Store break flag
-        $play_music = $line;
-
-        # Format result
-        $play_music =~ s/play_music=//gi;
-        chomp($play_music);
-    }
-}
-
-# Close file handle
-close $info;
+my $alarm_on = 0;
 
 # Run the main loop forever until the device is rebooted
 while (1 eq 1) {
+    # Parse runtime options and search for changes dynamically
+    # Define working directory
+    my $working_directory = getcwd();
+
+    # Load config
+    my $file = "$working_directory/config.txt";
+                        
+    # Open file handle
+    open my $info, $file or die "Could not open $file: $!";
+
+    while(my $line = <$info>) {
+        # Fetch music path address
+        if ($line =~ m/music_path=/) {
+            # Store music path address
+            $path = $line;
+
+            # Format result
+            $path =~ s/music_path=//gi;
+            chomp($path);
+        }
+
+        # Fetch break message path
+        if ($line =~ m/break_time_message=/) {
+            # Store break flag
+            $breaks = $line;
+
+            # Format result
+            $breaks =~ s/break_time_message=//gi;
+            chomp($breaks);
+        }
+
+        # If breaks are enabled, load break message path
+        if ($breaks == "1") {
+            # Fetch break message path
+            if ($line =~ m/break_message_path=/) {
+                # Store break path address
+                $break_message = $line;
+
+                # Format result
+                $break_message =~ s/break_message_path=//gi;
+                chomp($break_message);
+            }
+
+            # Fetch break interval
+            if ($line =~ m/break_time_interval=/) {
+                # Store break time interval
+                $break_interval = $line;
+
+                # Format result
+                $break_interval =~ s/break_time_interval=//gi;
+                chomp($break_interval);
+            }
+        }
+
+        # If alarms is enabled, load break variable into program
+        if ($line =~ m/alarm_mode=/) {
+            # Store alarm flag
+            $alarm_active = $line;
+
+            # Format result
+            $alarm_active =~ s/alarm_mode=//gi;
+            chomp($alarm_active);
+        }
+
+        # If alarms is enabled, load break variable into program
+        if ($alarm_active == 1) {
+            # Fetch alarm time
+            if ($line =~ m/alarm_time=/) {
+                # Store break path address
+                $alarm_time = $line;
+
+                # Format result
+                $alarm_time =~ s/alarm_time=//gi;
+                chomp($alarm_time);
+            }
+
+            # Fetch alarm begin time
+            if ($line =~ m/alarm_begin_time=/) {
+                # Store break path address
+                $alarm_begin_time = $line;
+
+                # Format result
+                $alarm_begin_time =~ s/alarm_begin_time=//gi;
+                chomp($alarm_begin_time);
+            }
+        }
+
+        # Fetch play music flag
+        if ($line =~ m/play_music=/) {
+            # Store break flag
+            $play_music = $line;
+
+            # Format result
+            $play_music =~ s/play_music=//gi;
+            chomp($play_music);
+        }
+    }
+
+    # Close file handle
+    close $info;
+
     # If something is not playing...search for something new to play
-    while ($playing eq 0 && $alarm_active eq 0 && $play_music eq 1) {
+    while ($playing eq 0 && $alarm_on eq 0 && $play_music eq 1) {
         # If valid folder found...exit
         if ($valid_folder eq 0) {
             # Import time module
@@ -194,7 +196,10 @@ while (1 eq 1) {
                 $valid_folder = 1;
 
                 if ($debug eq 1) {
+                    debug("=======================");
                     debug("Listening to $random_folder");
+                    debug("=======================");
+                    debug("\n");
                 }
 
                 # Open directory handle
@@ -264,7 +269,15 @@ while (1 eq 1) {
     my ($seconds, $minute) = gmtime(time);
     my $result = $minute % $break_interval;
 
-    if ($result == 0 && $alarm_active == 0) {
+    if ($result == 0 && $alarm_active == 0 && $breaks == 1) {
+        if ($debug eq 1) {
+            debug("=======================");
+            debug("It's break time!");
+            debug("=======================");
+            debug("\n");
+        }
+
+        # Play break message
         playBreakMessage();
 
         # Sleep for 60 seconds
@@ -274,15 +287,24 @@ while (1 eq 1) {
     # Debug if song is playing
     if ($debug eq 1) {
         if ($playing == 1) {
+            debug("=======================");
             debug("Something is playing.");
+            debug("=======================");
+            debug("\n");
         } else {
+            debug("=======================");
             debug("Nothing is playing.");
+            debug("=======================");
+            debug("\n");
         }
     }
 
     if ($playing eq 0) {
         if ($debug eq 1) {
+            debug("=======================");
             debug("Waiting for a little while until the next loop.");
+            debug("=======================");
+            debug("\n");
         }
 
         # Sleep
@@ -290,7 +312,14 @@ while (1 eq 1) {
     }
 
     # Check if the alarm is active
-    if ($alarm_mode == "1") {
+    if ($alarm_active == 1) {
+        if ($debug eq 1) {
+            debug("=======================");
+            debug("Alarm mode is active.");
+            debug("=======================");
+            debug("\n");
+        }
+
         # Get time
         my ($seconds, $minute, $hour) = gmtime(time);
         my $minute_as_int = $minute + 0;
@@ -304,13 +333,23 @@ while (1 eq 1) {
 
         # Convert to integer
         $concat_time = $concat_time + 0;
-        # Convert to integer
-        $concat_time = $concat_time + 0;
 
         if ($concat_time < $alarm_time || $concat_time > $alarm_begin_time) {
-            $alarm_active = 1;
+            $alarm_on = 1;
+            if ($debug eq 1) {
+                debug("=======================");
+                debug("Alarm is active");
+                debug("=======================");
+                debug("\n");
+            }
         } else {
-            $alarm_active = 0;
+            $alarm_on = 0;
+            if ($debug eq 1) {
+                debug("=======================");
+                debug("Alarm is not active");
+                debug("=======================");
+                debug("\n");
+            }
         }
     }
 }
