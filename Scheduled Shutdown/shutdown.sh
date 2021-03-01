@@ -9,7 +9,7 @@
 echo "======================================"
 echo "Welcome to Martin's Shutdown Script!"
 echo "======================================"
-echo "Please enter an amount in seconds before system shutdown."
+echo "Please enter the number of minutes before system shutdown."
 read minutes
 
 # Wait for number of seconds
