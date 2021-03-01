@@ -1,8 +1,9 @@
 # Pi MusicBox Scripts
- A collection of scripts you can run on Pi Music Box to enhance your listening experience!
+A collection of scripts you can run on your Pi Music Box to enhance your listening experience!
+
 
 ## Album Shuffler
-If you're one of those people who likes to listen to full albums rather than individual songs, you'll **love** this! Simply copy the script + config file to your Pi MusicBox, define the storage path of your music in the config file and run the script to start shuffling your albums. Album listens will be stored in the working directory as `songs_listened_to.txt` in a format similar to the below;
+If you're one of those people who likes to listen to full albums rather than individual songs, you'll **love** this! Simply copy the script to your Pi Music Box via SSH along with the config file, define the storage path of your music in the config file and run the script to start shuffling your albums. Album listens will be stored in the script's working directory as `songs_listened_to.txt` in a format similar to the below;
 
 ```
 31-01-2021_07_47-00: /music/USB/Music/Music/Alien Ant Farm/ANThology
@@ -14,7 +15,7 @@ If you're one of those people who likes to listen to full albums rather than ind
 ```
 
 ## Song Shuffler
-If you like shuffling through songs, then you can use this script.  Simply copy the script + config file to your Pi MusicBox, define the storage path of your music in the config file and run the script to start shuffling your albums. Song listens be stored in the working directory as `songs_listened_to.txt` in a format similar to the below;
+If you like shuffling through songs rather than albums then you can use this script. Simply copy the script along with the config file to your Pi Music Box, define the storage path of your music in the config file and run the script to start shuffling your albums. Song listens will be stored in the script's working directory as `songs_listened_to.txt` in a format similar to the below;
 
 ```
 31-01-2021_11_37-24: /music/USB/Music/Music/Marilyn Manson/Eat Me, Drink Me/12 - Heart-Shaped Glasses (When the Heart Guides the Hand) [Inhuman Remix by Jade Puget].mp3
@@ -24,11 +25,14 @@ If you like shuffling through songs, then you can use this script.  Simply copy 
 31-01-2021_11_38-01: /music/USB/Music/Music/Linkin Park feat. Pusha T & Stormzy/One More Light/02 - Good Goodbye.mp3
 ```
 
+## Master Shuffler
+Do you want to switch between both albums and songs? Then the "Master Shuffler" is for you! 
+
 ## Scheduled Shutdown
-Pi MusicBox doesn't have any kind of sleep timer so I built this script to help. Simply run `shutdown.sh`, enter the number of minutes before shutdown and the box will shutdown after that number of minutes has elapsed.
+Pi Music Box doesn't have any kind of sleep timer so I built this script to help. Simply run `shutdown.sh`, enter the number of minutes you want the box to shutdown in and you're done. The box will shutdown after the specified number of minutes has elapsed.
 
 ## How to run the scripts
-Once you have transferred the scripts to your Pi MusicBox, you have to SSH into the box and run;
+Once you have transferred the scripts to your Pi Music Box, you have to SSH into the box and run;
 
 ```
 perl random_song_player.pl
@@ -52,4 +56,4 @@ The scripts will terminate if you run exit your SSH session. In order to run the
 - Hit Control + A
 - Hit Control + D
 
-This will run the script inside a screen and allow you to exit your SSH session but still keep your scripts running.
+This will run the script inside a screen and allow you to exit your SSH session but still keep your scripts running in the background.
